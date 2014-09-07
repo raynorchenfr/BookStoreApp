@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../layout_nav.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:optionpage="http://xmlns.jcp.org/jsf/composite/optionpage">
+
+    <ui:define name="title">
+        Welcome Page
+    </ui:define>
+
+    <ui:define name="content">
+         <h2>Welcome #{loginBean.remoteUser}</h2>
+         
+         <h:dataTable class="table" value ="#{KMGRBean.findByUserName(loginBean.remoteUser).managedBooks}" var="booklist" rendered="#{loginBean.KMGR}">
+            <h:column>
+                <f:facet name="header">Book ISBN</f:facet>
+                <h:outputText value="#{booklist.ISBN}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Book Name</f:facet>
+                <h:form><h:commandLink value="#{booklist.name}" action="#{bookController.doBookDetails(booklist)}"/></h:form>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Book Authors</f:facet>
+                <h:outputText value="#{booklist.listWriters()}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Book Ideology</f:facet>
+                <h:outputText value="#{booklist.ideology.name}"/>
+            </h:column>
+     
+        </h:dataTable>
+        <br/>
+        <h:dataTable class="table" value ="#{KMGRBean.findByUserName(loginBean.remoteUser).managedAuthors}" var="authorlist" rendered="#{loginBean.KMGR}">
+            <h:column>
+                <f:facet name="header">Author Name</f:facet>
+                <h:form><h:commandLink value="#{authorlist.name}" action="#{authorController.doAuthorDetails(authorlist)}"/></h:form>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Author's works</f:facet>
+                <h:outputText value="#{authorlist.listWorks()}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Author's ideology</f:facet>
+                <h:outputText value="#{authorlist.ideology.name}"/>
+            </h:column>
+
+        </h:dataTable>
+        <br/>
+        <h:dataTable class="table" value ="#{KMGRBean.findByUserName(loginBean.remoteUser).managedPSs}" var="PSlist" rendered="#{loginBean.KMGR}">
+            <h:column>
+                <f:facet name="header">Political Spectrum Basics</f:facet>
+                <h:outputText value="#{PSlist.basic}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Political Spectrum Ideologies</f:facet>
+                <h:outputText value="#{PSlist.ideology.name}"/>
+            </h:column>
+
+        </h:dataTable>
+        <br/>
+        <h:dataTable class="table" value ="#{KMGRBean.findByUserName(loginBean.remoteUser).managedIdeos}" var="ideolist" rendered="#{loginBean.KMGR}">
+            <h:column>
+                <f:facet name="header">Ideology Name</f:facet>
+                <h:form><h:commandLink value="#{ideolist.name}" action="#{ideologyController.doIdeologyDetails(ideolist)}"/></h:form>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Ideology Books</f:facet>
+                <h:outputText value="#{ideolist.listBooks()}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Ideology Writers</f:facet>
+                <h:outputText value="#{ideolist.listWriters()}"/>
+            </h:column>
+
+        </h:dataTable>
+        <br/>
+        <h2>Add another author into your duty list</h2>
+        <h:form>
+            <optionpage:AuthorBuild author="#{knowledgeBean.author}"/>
+            <h:commandButton value="Add author" action="#{knowledgeBean.doAddAuthor()}"/>
+        </h:form>
+        <br/>
+        <h2>Add another book into your duty list</h2>
+        <h:form>
+            <optionpage:BookBuild book="#{knowledgeBean.book}"/>
+            <h:commandButton value="Add book" action="#{knowledgeBean.doAddBook()}"/>
+        </h:form>
+        <br/>
+        <h2>Add another ideology into your duty list</h2>
+        <h:form>
+            <optionpage:IdeoBuild ideology="#{knowledgeBean.ideo}"/>
+            <h:commandButton value="Add ideology" action="#{knowledgeBean.doAddIdeo()}"/>
+        </h:form>
+        <h:form>
+            <h:commandLink class="btn btn-default" action="#{loginBean.logout}" value ="Log Out"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
