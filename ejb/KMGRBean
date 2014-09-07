@@ -1,0 +1,69 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ejb;
+
+import domain.KMGR;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+
+/**
+ *
+ * @author Tianyang
+ */
+@Stateless
+@Named ("KMGRBean")
+public class KMGRBean extends AbstractUserBean{
+
+    // Add business logic below. (Right-click in editor and choose
+    // "Insert Code > Add Business Method")
+
+    public KMGRBean() {
+        super(KMGR.class);
+    }
+
+
+    
+ 
+    /**
+     *
+     * @return
+     */
+    public List<KMGR> findAllAlternate(){
+        Query Q = getEntityManager().createQuery("select k from KMGR k");
+        return Q.getResultList();
+    }
+    
+    public List<KMGR> findAll(){
+        return super.findAll("select k from KMGR k");
+    }
+    
+    /**
+     *
+     * @param userName
+     * @return
+     */
+    
+    
+    public KMGR findByUserName(String userName){
+        TypedQuery<KMGR> query = getEntityManager().createNamedQuery("KMGR.findByUserName", KMGR.class);
+        query.setParameter("userName", userName);
+        return query.getSingleResult();
+        
+        //public List<Book> findByBookName(String BookName) {
+        //Query q = em.createQuery("select b from Book b where b.Name = ?1 ", Book.class);
+        //q.setParameter(1,BookName);
+        //return q.getResultList();}
+        
+        //public List<T> findAll(String jpql){
+        //TypedQuery<T> query = em.createQuery(jpql, entityClass);
+        //return query.getResultList();
+        //}
+    
+}
+}
