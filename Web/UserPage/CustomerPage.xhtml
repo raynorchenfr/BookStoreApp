@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../layout_nav.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:optionpage="http://xmlns.jcp.org/jsf/composite/optionpage">
+
+    <ui:define name="title">
+        Welcome Page
+    </ui:define>
+
+    <ui:define name="content">
+         <h2>Welcome #{loginBean.remoteUser}</h2>
+         <h:dataTable class="table" value ="#{customerBean.findByUserName(loginBean.remoteUser).bookInCart}" var="cartlist" rendered="#{loginBean.customer}">
+            <h:column>
+                <f:facet name="header">Book name</f:facet>
+                <h:outputText value="#{cartlist.name}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Book ISBN</f:facet>
+                <h:outputText value="#{cartlist.ISBN}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Book Authors</f:facet>
+                <h:outputText value="#{cartlist.listWriters()}"/>
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header">Book Ideology</f:facet>
+                <h:outputText value="#{cartlist.ideology.name}"/>
+            </h:column>
+             
+             <h:column>
+                <f:facet name="header"/>
+                <h:form><h:commandLink value="Delete" action="#{cartBean.doRemoveBook(cartlist)}"/></h:form>
+            </h:column>
+
+        </h:dataTable>
+        <br/>
+        <h2>Place another book into your cart</h2>
+        <h:form>
+            <optionpage:CartTransaction book="#{cartBean.boughtBook}"/>
+            <h:commandButton value="Place" action="#{cartBean.doPlaceBook()}"/>
+        </h:form>
+        <br/>
+         <h:form>
+            <h:commandLink action="#{loginBean.logout}" value ="Log Out"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
